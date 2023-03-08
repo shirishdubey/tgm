@@ -9,6 +9,8 @@ Created on Thu Mar  9 00:09:33 2023
 import pandas as pd
 from sqlalchemy import create_engine
 import argparse
+from datetime import datetime
+
 
 
 parser = argparse.ArgumentParser()
@@ -37,7 +39,9 @@ df_orders_app = pd.DataFrame(engine.execute(''' SELECT "id", "customer_id", "dat
                                  "customer_id",
                                  "date",
                                  "total"])
-  
+
+df_orders_app['pushed_to_staging_on']= datetime.today().strftime('%d-%b-%y %H:%M:%S')
+                             
 print("uploading orders_app table")
 df_orders_app.to_sql('staging.orders_app', con = connection,schema = dbschema, if_exists = 'append', index = False)
 
@@ -48,7 +52,9 @@ df_orders_pos = pd.DataFrame(engine.execute(''' SELECT "id", "customer_id", "dat
                                  "customer_id",
                                  "date",
                                  "total"])
-  
+
+df_orders_pos['pushed_to_staging_on']= datetime.today().strftime('%d-%b-%y %H:%M:%S')
+                             
 print("uploading orders_pos table")
 df_orders_pos.to_sql('staging.orders_pos', con = connection,schema = dbschema, if_exists = 'append', index = False)
       
@@ -60,5 +66,7 @@ df_orders_ecomm = pd.DataFrame(engine.execute(''' SELECT "id", "customer_id", "d
                                  "date",
                                  "total"])
   
+df_orders_ecomm['pushed_to_staging_on']= datetime.today().strftime('%d-%b-%y %H:%M:%S')
+
 print("uploading orders_ecomm table")
 df_orders_ecomm.to_sql('staging.orders_ecomm', con = connection,schema = dbschema, if_exists = 'append', index = False)
